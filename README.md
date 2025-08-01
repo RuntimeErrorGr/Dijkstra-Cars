@@ -1,170 +1,115 @@
-Lăbău Cristea Andrei Liviu 324CB
+# Vehicle and Map Management System
 
-	In implementarea temei am grupat clasele in 2 pachete in functie de scop:
+In this project, I grouped the classes into two packages based on their purpose:
 
-		1) "Cars" contine clasele referitoare la obiectele ce pot fi conduse:
+## 1) `Cars` Package – Classes for Drivable Objects
 
-			1.1) Vehicul - clasa abstracta ce ajuta la gruparea obiectelor de 
-			tip vehicul. Atributele clasei au modificatorul de acces "private"
-			pentru a nu putea fi modificate din afara clasei (costul
-			si limita de gabarit al oricarui vehicul sunt initializate la 
-			instantiere si nu mai sunt modificate pe parcursul programului).
-			Constructorii au modificatorul de acces "protected" deoarece clasa
-			Vehicul este abstracta si nu trebuie instantiata. Constructorii sunt 
-		 	apelati numai in clasele derivate Mopped, Autovehicul si Autoutilitar.
+### 1.1) `Vehicul`  
+An abstract class that groups all vehicle types.  
+Its attributes are marked `private` to prevent external modification (vehicle cost and size limit are initialized at construction and remain constant).  
+Constructors are `protected` because this class should not be instantiated directly. They're only called by its derived classes: `Mopped`, `Autovehicul`, and `Autoutilitar`.
 
-		 		1.1.1) Mopped - clasa abstracta, extinde clasa Vehicul. Ajuta la
-		 	gruparea obiectelor cu acelasi gabarit (gabaritul unui mopped este
-		 	intotdeauna 1, dar costul este nedefinit). Constructorul are  
-		 	modificatorul de acces "protected" deoarece clasa Mopped este 
-		 	abstracta si nu trebuie instantiata. Constructorul este apelat 
-		 	numai in clasele derivate Bicicleta si Motocicleta.
+#### 1.1.1) `Mopped`  
+An abstract class that extends `Vehicul`. It groups all vehicles with size 1.  
+Cost is undefined here.  
+Constructor is `protected` and only used by the `Bicicleta` and `Motocicleta` classes.
 
-		 		1.1.1.1) Bicicleta - clasa instantiata la intalnirea comenzii
-		 		drive cu primul parametru "b". Mosteneste clasa Mopped pentru
-		 		ca gabaritul unei biciclete este intotdeauna 1. Constructorul
-		 		are modificatorul de acces public, invoca constructorul 
-		 		clasei parinte si actualizeaza costul bicicletei la 1.
+##### 1.1.1.1) `Bicicleta`  
+Instantiated when a `drive` command with the first parameter `"b"` is encountered.  
+Inherits from `Mopped` (size always 1).  
+Public constructor sets the vehicle cost to `1`.
 
-		 		1.1.1.2) Motocicleta - clasa instantiata la intalnirea 
-		 		comenzii drive cu primul parametru "m". Mosteneste clasa Mopped 
-		 		pentru ca gabaritul unei motociclete este intotdeauna 1.
-		 		Constructorul are modificatorul de acces public, invoca
-		 		constructorul clasei parinte si actualizeaza costul 
-		 		motocicletei la 2.
+##### 1.1.1.2) `Motocicleta`  
+Instantiated when the `drive` command with parameter `"m"` is used.  
+Inherits from `Mopped` (size always 1).  
+Public constructor sets the vehicle cost to `2`.
 
-		 		1.1.2) Autovehicul - clasa abstracta, extinde clasa Vehicul.
-		 	Ajuta la gruparea obiectelor cu acelasi gabarit (gabaritul unui 
-		 	autovehicul este intotdeauna 2, dar costul este nedefinit). 
-		 	Constructorul are modificatorul de acces "protected" deoarece clasa 
-		 	Autovehicul este abstracta si nu trebuie instantiata. Constructorul
-		 	este apelat numai in clasa derivata Autoturism.
+#### 1.1.2) `Autovehicul`  
+Abstract class extending `Vehicul`, groups vehicles with size 2.  
+Cost remains undefined at this level.  
+Constructor is `protected`, used only by `Autoturism`.
 
-		 		1.1.2.1) Autoturism - clasa instantiata la intalnirea comenzii 
-		 		drive cu primul parametru "a". Mosteneste clasa Autovehicul 
-		 		pentru ca gabaritul unei autoturism este intotdeauna 2.
-		 		Constructorul are modificatorul de acces public, invoca
-		 		constructorul clasei parinte si actualizeaza costul 
-		 		autoturismului la 4.
+##### 1.1.2.1) `Autoturism`  
+Instantiated when the command `drive a` is received.  
+Inherits from `Autovehicul` (size always 2).  
+Public constructor sets cost to `4`.
 
-		 		1.1.3) Autoutilitar - clasa abstracta, extinde clasa Vehicul.
-		 	Ajuta la gruparea obiectelor cu acelasi gabarit (gabaritul unui
-		 	autoutilitar este intotdeauna 3, dar costul este nedefinit). 
-		 	Constructorul are modificatorul de acces "protected" deoarece 
-		 	clasa Autoutilitar este abstracta si nu trebuie instantiata. 
-		 	Constructorul este apelat numai in clasa derivata Camion.
+#### 1.1.3) `Autoutilitar`  
+Abstract class extending `Vehicul`, for size-3 vehicles.  
+Constructor is `protected`, used only by `Camion`.
 
-		 		1.1.3.1) Camion - clasa instantiata la intalnirea comenzii drive 
-		 		cu primul parametru "c". Mosteneste clasa Autoutilitar pentru ca 
-		 		gabaritul unui camion este intotdeauna 3. Constructorul are 
-		 		modificatorul de acces public, invoca constructorul clasei 
-		 		parinte si actualizeaza costul camionului la 6.
+##### 1.1.3.1) `Camion`  
+Instantiated when `drive c` is encountered.  
+Inherits from `Autoutilitar` (size always 3).  
+Public constructor sets cost to `6`.
 
-		2) "Map" contine clasele referitoare la graful propriu-zis, componentele
-		acestuia (strazile) si restrictii:
+---
 
-			2.1) Harta - clasa este instantiata o singura data (harta este unica
-			in program) in functia main. Aceasta contine metodele de citire/
-			scriere in fisier si executie a comenzilor citite.
-			Majoritatea metodelor si atributelor clasei Harta au modificatorul
-			de acces private deoarece acestea au exclusiv functionalitate
-			interna in clasa (cu exceptia metodelor de get si set pentru atribute,
-			constructorilor si a metodei executeCommands care trebuie apelata in main).
-			La intrarea in fuctia main este creat un obiect de tip Harta. Prin
-			intermediul constructorului ce primeste ca parametru un obiect de 
-			tip Scanner este citit graful din fisierul "map.in" si stocat sub
-			forma de lista de adiacenta: numarul de strazi (muchii), numarul de 
-			noduri si apoi sunt citite si adaugate in lista de adiacenta atatea
-			obiecte de tip strada cat indica numarul de strazi. Deci rolul
-			metodei addStreet a acestei clase este de a crea un obiect de tip 
-			strada pe baza randului curent citit din fisierul de intrare si de 
-			a-l adauga (pe baza numelui nodului de start) in lista de adiacenta la 
-			pozitia corespunzatoare. 
-			Dupa ce graful a fost generat sunt citite si executate mai departe 
-			comenzile din fisierul "map.in" si se pot intalni 2 cazuri:
+## 2) `Map` Package – Graph and Routing Logic
 
-				2.1.1) Este intalnita o comanda "trafic"/"blocaj"/"accident":
-				In acest caz trebuie stiut faptul ca fiecare obiect de tip
-				Strada din graf are o lista de obiecte de tip ambuteiaj (lista
-				de restrictii). Aceasta lista poate fi vida sau nu la intalnirea
-				unei comenzi "drive."
-				La intalnirea "trafic"/"blocaj"/"accident", metoda addRestriction
-				creeaza un ambuteiaj de tipul Trafic, Blocaj sau Ambuteiaj.
-				In functie de numele nodului de start si numele nodului de stop
-				este adaugat in lista de ambuteiaje a obiectului de tip Strada
-				corespunzator din lista de adiacenta.
+### 2.1) `Harta`  
+A singleton class representing the map. Instantiated once in `main()`.  
+Handles file I/O and command execution.
 
-				2.1.2) Este intalnita o comanda "drive": in acest caz este 
-				apelata metoda dijkstra ce aplica algoritmul Dijkstra asupra
-				grafului in felul urmator: 
-					- se pleaca de la nodul de start (al carui nume este dat
-					ca parametru comenzii drive)
-					- distantele minime de la nodul de start la toate celelalte
-					noduri din graf vor fi retinute intr-un vector. Initial
-					se considera ca distanta intre nodul de start si celelalte
-					noduri este foarte mare (initializata cu valoarea maxima 
-					a unui signed int).
-					- nodul este adaugat intr-o coada de prioritati 
-					- cat timp coada de prioritati nu este goala, este extras
-					primul nod din coada si se itereaza prin toti vecinii lui
-					- se verifica daca pentru vecinul curent este indeplinita
-					restrictia de gabarit
-					- daca da, este parcursa lista de restrictii a vecinului 
-					curent si este calculat costul suplimentar generat de 
-					restrictii sale
-					- costul trecerii prin vecinul curent este calculat
-					pe baza formulei cost_vehicul * cost_strada + cost_ambuteiaje
-					- costul final este calculat ca suma intre costul initial
-					din vector + costul calculat cu formula de mai sus
-					- daca acest cost este mai bun decat cel anterior, vecinul
-					curent este scos din coada, vectorul de costuri este 
-					actualizat si nodul este reintrodus
-					- procedeul se repeta pana cand nu mai este posibil sa se 
-					gaseasca un cost mai mic decat cel deja existent in vectorul
-					de costuri
-					- de asemenea, pentru afisarea caii de cost minim intre
-					punctele start si stop primite ca argumente ale comenzii drive
-					metoda returneaza un vector ce pastreaza pe fiecare pozitie 
-					numele nodului de stop precedent. Punctul de start are 
-					intotdeauna precedentul null.
-				Rezultatele comenzii drive sunt afisate in fisierul de iesire:
-				daca s-a gasit un drum de cost minim este afisat drumul si costul
-				respectiv, daca nu sunt afisate punctele de start si stop si
-				null.
+- Most methods/attributes are `private` for internal use, except getters/setters, constructors, and `executeCommands`.
+- Reads the map from `map.in` using a `Scanner`:
+  - Parses number of nodes and edges.
+  - Builds an adjacency list of `Strada` objects via `addStreet`.
 
-			2.2) Strada - graful este format practic din obiecte de tip Strada.
-			Fiecare strada este identificata in mod unic de numele acesteia 
-			(nume nod start + nume nod stop).
-			In cadrul acestei clase este implementata functia compare din 
-			interfata Comparator, necesara pentru implementarea algoritmului
-			Dijkstra cu o coada de prioritati java.util.priorityqueue. 
+Then it processes the commands found in the input:
 
-			2.3) Ambuteiaj - clasa abstracta. Ajuta la gruparea obiectelor de 
-			tip ambuteiaj (acestea se comporta practic la fel, singura diferenta
-			intre ele fiind tipul (trafic/blocaj/accident)). Constructorul are  
-		 	modificatorul de acces "protected" deoarece clasa Ambuteiaj este 
-		 	abstracta si nu trebuie instantiata.
+#### 2.1.1) Commands: `trafic`, `blocaj`, or `accident`  
+Each `Strada` contains a list of restrictions (can be empty).  
+Upon encountering one of these commands:
+- `addRestriction()` creates a `Trafic`, `Blocaj`, or `Accident` instance.
+- Adds it to the restriction list of the appropriate `Strada` based on start/stop node.
 
-				2.3.1) Trafic -  clasa instantiata la intalnirea comenzii 
-				addRestriction cu primul parametru "trafic".
+#### 2.1.2) Command: `drive`  
+Triggers the `dijkstra()` method, which:
 
-				2.3.2) Blocaj - clasa instantiata la intalnirea comenzii
-				addRestriction cu primul parametru "blocaj".
+- Starts from the given start node.
+- Initializes a distance vector with `INT_MAX` for all nodes.
+- Uses a priority queue to process nodes.
+- For each neighbor:
+  - Checks if the vehicle size restriction allows traversal.
+  - Calculates the extra cost added by restrictions.
+  - Computes total cost as:
+    ```
+    total_cost = vehicle_cost * street_cost + traffic_penalty
+    ```
+  - If a better path is found, updates distances and requeues the node.
 
-				2.3.3) Accident - clasa instantiata la intalnirea comenzii 
-				addRestriction cu primul parametru "accident".
+Also tracks predecessors for shortest path reconstruction.
 
-	Am utilizat conceptul de mostenire prin crearea unor superclase si a claselor
-	derivate acolo unde a fost posibil (Vehicul cu Mopped, Autovehicul, Autoutili
-	tar, Ambuteiaj cu Trafic, Blocaj, Accident) pe baza unor caracteristici
-	comune (limita de viteza, limita de gabarit).
-	Am utilizat conceptul de abstractizare prin crearea claselor abstracte cu
-	scopul de a nu putea fi instantiate. Intotdeauna trebuie sa se lucreze cu 
-	obiecte ale claselor lor derivate.
-	Am utilizat conceptul de polimorfism ghidandu-ma dupa definita din Laborator
-	2: "Polimorfismul se referă la faptul că un obiect din clasa derivată poate 
-	fi folosita ca parametru al unei metode ce primește la definire un obiect al 
-	clasei de bază.". Astfel metoda "drive" a clasei Harta asteapta ca parametru
-	un obiect de tip Vehicul, dar este intotdeauna apelata cu obiecte de tip
-	Bicicleta, Motocicleta, Autoturism sau Camion (clase care extind clasele
-	Mopped, Autovehicul si Autoutilitar, care la randul lor extind clasa Vehicul). 
+If a path is found, it's printed along with the cost to output. Otherwise, outputs `null` with start and stop nodes.
+
+---
+
+### 2.2) `Strada`  
+Represents the edges in the graph, uniquely identified by start and stop nodes.  
+Implements `Comparator` for use in `PriorityQueue` (Dijkstra).
+
+### 2.3) `Ambuteiaj`  
+An abstract class grouping all types of traffic restrictions.  
+Constructor is `protected`, used only by derived types:
+
+- **2.3.1) `Trafic`** – created on `addRestriction trafic`
+- **2.3.2) `Blocaj`** – created on `addRestriction blocaj`
+- **2.3.3) `Accident`** – created on `addRestriction accident`
+
+---
+
+## OOP Concepts Used
+
+- **Inheritance**: 
+  Superclasses and subclasses used to group common logic (e.g., `Vehicul` with its subclasses, `Ambuteiaj` with its types).
+  
+- **Abstraction**:  
+  Abstract classes prevent instantiation. Only derived types are used in logic.
+
+- **Polymorphism**:  
+  Based on Lab 2 definition:  
+  “Polymorphism allows an object of a derived class to be passed to a method expecting a base class.”  
+  Example: `Harta.drive()` accepts a `Vehicul`, but works with instances of `Bicicleta`, `Motocicleta`, `Autoturism`, or `Camion`.
+
+---
